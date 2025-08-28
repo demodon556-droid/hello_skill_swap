@@ -33,30 +33,17 @@
                 <h5>Category</h5>
                 <div class="filter-options">
                   <label class="filter-checkbox">
-                    <input type="checkbox" checked="">
+                    <input type="checkbox" checked="" data-category="all">
                     <span class="checkmark"></span>
                     All Categories
                   </label>
+                  {% for category in categories %}
                   <label class="filter-checkbox">
-                    <input type="checkbox">
+                    <input type="checkbox" data-category="{{ category.id }}">
                     <span class="checkmark"></span>
-                    Programming
+                    {{ category.name }}
                   </label>
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Design
-                  </label>
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Business
-                  </label>
-                  <label class="filter-checkbox">
-                    <input type="checkbox">
-                    <span class="checkmark"></span>
-                    Marketing
-                  </label>
+                  {% endfor %}
                 </div>
               </div>
 
@@ -129,7 +116,7 @@
             <div class="courses-header" data-aos="fade-left" data-aos-delay="100">
               <div class="search-box">
                 <i class="bi bi-search"></i>
-                <input type="text" placeholder="Search courses...">
+                <input type="text" id="searchInput" placeholder="Search categories or skills...">
               </div>
               <div class="sort-dropdown">
                 <select>
@@ -142,232 +129,48 @@
               </div>
             </div>
 
-            <div class="courses-grid" data-aos="fade-up" data-aos-delay="200">
+            <div class="courses-grid" data-aos="fade-up" data-aos-delay="200" id="coursesGrid">
               <div class="row">
-                <div class="col-lg-6 col-md-6">
+                {% for skill in skills %}
+                <div class="col-lg-6 col-md-6 course-item" data-category="{{ skill.category.id }}" data-skill-name="{{ skill.name|lower }}" data-category-name="{{ skill.category.name|lower }}">
                   <div class="course-card">
                     <div class="course-image">
-                      <img src="{% static 'assets/img/education/courses-3.webp' %}" alt="Course" class="img-fluid">
-                      <div class="course-badge">Best Seller</div>
-                      <div class="course-price">$89</div>
+                      {% if skill.image %}
+                        <img src="{{ skill.image.url }}" alt="{{ skill.name }}" class="img-fluid">
+                      {% else %}
+                        <img src="{% static 'assets/img/education/courses-3.webp' %}" alt="{{ skill.name }}" class="img-fluid">
+                      {% endif %}
+                      <div class="course-badge">{{ skill.category.name }}</div>
                     </div>
                     <div class="course-content">
                       <div class="course-meta">
-                        <span class="category">Programming</span>
-                        <span class="level">Intermediate</span>
+                        <span class="category">{{ skill.category.name }}</span>
+                        <span class="level">All Levels</span>
                       </div>
-                      <h3>Advanced JavaScript Development</h3>
-                      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+                      <h3>{{ skill.name }}</h3>
+                      <p>{{ skill.description|truncatewords:20 }}</p>
                       <div class="course-stats">
                         <div class="stat">
-                          <i class="bi bi-clock"></i>
-                          <span>15 hours</span>
+                          <i class="bi bi-calendar"></i>
+                          <span>Added {{ skill.created_at|date:"M d, Y" }}</span>
                         </div>
                         <div class="stat">
                           <i class="bi bi-people"></i>
-                          <span>1,245 students</span>
-                        </div>
-                        <div class="rating">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-half"></i>
-                          <span>4.8 (89 reviews)</span>
+                          <span>Learn this skill</span>
                         </div>
                       </div>
-                      <div class="instructor-info">
-                        <img src="{% static 'assets/img/person/person-m-3.webp' %}" alt="Instructor" class="instructor-avatar">
-                        <span class="instructor-name">Dr. Marcus Thompson</span>
-                      </div>
-                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll Now</a>
+                      <a href="{% url 'core:enroll' %}" class="btn-course">Start Learning</a>
                     </div>
                   </div><!-- End Course Card -->
                 </div>
-
-                <div class="col-lg-6 col-md-6">
-                  <div class="course-card">
-                    <div class="course-image">
-                      <img src="{% static 'assets/img/education/courses-7.webp' %}" alt="Course" class="img-fluid">
-                      <div class="course-badge badge-free">Free</div>
-                    </div>
-                    <div class="course-content">
-                      <div class="course-meta">
-                        <span class="category">Design</span>
-                        <span class="level">Beginner</span>
-                      </div>
-                      <h3>UI/UX Design Fundamentals</h3>
-                      <p>Mauris blandit aliquet elit, eget tincidunt nibh pulvinar a. Vestibulum ac diam sit amet quam vehicula elementum sed sit amet.</p>
-                      <div class="course-stats">
-                        <div class="stat">
-                          <i class="bi bi-people"></i>
-                          <span>2,891 students</span>
-                        </div>
-                        <div class="rating">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star"></i>
-                          <span>4.6 (156 reviews)</span>
-                        </div>
-                      </div>
-                      <div class="instructor-info">
-                        <img src="{% static 'assets/img/person/person-f-7.webp' %}" alt="Instructor" class="instructor-avatar">
-                        <span class="instructor-name">Sarah Johnson</span>
-                      </div>
-                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll</a>
-                    </div>
-                  </div><!-- End Course Card -->
+                {% empty %}
+                <div class="col-12">
+                  <div class="text-center py-5">
+                    <h4>No skills available at the moment</h4>
+                    <p>Please check back later for new courses and skills.</p>
+                  </div>
                 </div>
-
-                <div class="col-lg-6 col-md-6">
-                  <div class="course-card">
-                    <div class="course-image">
-                      <img src="{% static 'assets/img/education/courses-12.webp' %}" alt="Course" class="img-fluid">
-                      <div class="course-badge badge-new">New</div>
-                      <div class="course-price">$149</div>
-                    </div>
-                    <div class="course-content">
-                      <div class="course-meta">
-                        <span class="category">Business</span>
-                        <span class="level">Beginner</span>
-                      </div>
-                      <h3>Digital Marketing Strategies</h3>
-                      <p>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas vestibulum tortor.</p>
-                      <div class="course-stats">
-                        <div class="stat">
-                          <i class="bi bi-people"></i>
-                          <span>678 students</span>
-                        </div>
-                        <div class="rating">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <span>5.0 (42 reviews)</span>
-                        </div>
-                      </div>
-                      <div class="instructor-info">
-                        <img src="{% static 'assets/img/person/person-m-8.webp' %}" alt="Instructor" class="instructor-avatar">
-                        <span class="instructor-name">David Rodriguez</span>
-                      </div>
-                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll Now</a>
-                    </div>
-                  </div><!-- End Course Card -->
-                </div>
-
-                <div class="col-lg-6 col-md-6">
-                  <div class="course-card">
-                    <div class="course-image">
-                      <img src="{% static 'assets/img/education/courses-5.webp' %}" alt="Course" class="img-fluid">
-                      <div class="course-price">$199</div>
-                    </div>
-                    <div class="course-content">
-                      <div class="course-meta">
-                        <span class="category">Programming</span>
-                        <span class="level">Advanced</span>
-                      </div>
-                      <h3>Machine Learning with Python</h3>
-                      <p>Donec rutrum congue leo eget malesuada. Cras ultricies ligula sed magna dictum porta nulla facilisi morbi tempus.</p>
-                      <div class="course-stats">
-                        <div class="stat">
-                          <i class="bi bi-people"></i>
-                          <span>534 students</span>
-                        </div>
-                        <div class="rating">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-half"></i>
-                          <span>4.7 (73 reviews)</span>
-                        </div>
-                      </div>
-                      <div class="instructor-info">
-                        <img src="{% static 'assets/img/person/person-f-12.webp' %}" alt="Instructor" class="instructor-avatar">
-                        <span class="instructor-name">Prof. Anna Chen</span>
-                      </div>
-                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll Now</a>
-                    </div>
-                  </div><!-- End Course Card -->
-                </div>
-
-                <div class="col-lg-6 col-md-6">
-                  <div class="course-card">
-                    <div class="course-image">
-                      <img src="{% static 'assets/img/education/courses-9.webp' %}" alt="Course" class="img-fluid">
-                      <div class="course-badge">Popular</div>
-                      <div class="course-price">$59</div>
-                    </div>
-                    <div class="course-content">
-                      <div class="course-meta">
-                        <span class="category">Marketing</span>
-                        <span class="level">Intermediate</span>
-                      </div>
-                      <h3>Social Media Marketing</h3>
-                      <p>Sed porttitor lectus nibh vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</p>
-                      <div class="course-stats">
-                        <div class="stat">
-                          <i class="bi bi-people"></i>
-                          <span>3,457 students</span>
-                        </div>
-                        <div class="rating">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star"></i>
-                          <span>4.5 (234 reviews)</span>
-                        </div>
-                      </div>
-                      <div class="instructor-info">
-                        <img src="{% static 'assets/img/person/person-m-5.webp' %}" alt="Instructor" class="instructor-avatar">
-                        <span class="instructor-name">Michael Davis</span>
-                      </div>
-                      <a href="{% url 'core:enroll' %} " class="btn-course">Enroll Now</a>
-                    </div>
-                  </div><!-- End Course Card -->
-                </div>
-
-                <div class="col-lg-6 col-md-6">
-                  <div class="course-card">
-                    <div class="course-image">
-                      <img src="{% static 'assets/img/education/courses-14.webp' %}" alt="Course" class="img-fluid">
-                      <div class="course-badge badge-certificate">Certificate</div>
-                      <div class="course-price">$99</div>
-                    </div>
-                    <div class="course-content">
-                      <div class="course-meta">
-                        <span class="category">Design</span>
-                        <span class="level">Intermediate</span>
-                      </div>
-                      <h3>Graphic Design Mastery</h3>
-                      <p>Curabitur aliquet quam id dui posuere blandit mauris blandit aliquet elit eget tincidunt nibh pulvinar.</p>
-                      <div class="course-stats">
-                        <div class="stat">
-                          <i class="bi bi-people"></i>
-                          <span>1,892 students</span>
-                        </div>
-                        <div class="rating">
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-fill"></i>
-                          <i class="bi bi-star-half"></i>
-                          <span>4.9 (127 reviews)</span>
-                        </div>
-                      </div>
-                      <div class="instructor-info">
-                        <img src="{% static 'assets/img/person/person-f-9.webp' %}" alt="Instructor" class="instructor-avatar">
-                        <span class="instructor-name">Lisa Martinez</span>
-                      </div>
-                      <a href="{% url 'core:enroll' %}" class="btn-course">Enroll Now</a>
-                    </div>
-                  </div><!-- End Course Card -->
-                </div>
-
+                {% endfor %}
               </div>
             </div><!-- End Courses Grid -->
 
@@ -404,4 +207,118 @@
 
     </section><!-- /Courses 2 Section -->
 
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const categoryCheckboxes = document.querySelectorAll('input[data-category]');
+    const courseItems = document.querySelectorAll('.course-item');
+    
+    // Filter function
+    function filterCourses() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const selectedCategories = Array.from(categoryCheckboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => checkbox.getAttribute('data-category'));
+        
+        // If "All Categories" is selected, show all categories
+        const showAllCategories = selectedCategories.includes('all');
+        
+        courseItems.forEach(item => {
+            const skillName = item.getAttribute('data-skill-name');
+            const categoryName = item.getAttribute('data-category-name');
+            const categoryId = item.getAttribute('data-category');
+            
+            // Check search criteria
+            const matchesSearch = !searchTerm || 
+                skillName.includes(searchTerm) || 
+                categoryName.includes(searchTerm);
+            
+            // Check category criteria
+            const matchesCategory = showAllCategories || 
+                selectedCategories.includes(categoryId);
+            
+            // Show/hide item
+            if (matchesSearch && matchesCategory) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        
+        // Show message if no courses match
+        const visibleCourses = Array.from(courseItems).filter(item => 
+            item.style.display !== 'none'
+        );
+        
+        const coursesGrid = document.getElementById('coursesGrid');
+        let noResultsMsg = coursesGrid.querySelector('.no-results-message');
+        
+        if (visibleCourses.length === 0) {
+            if (!noResultsMsg) {
+                noResultsMsg = document.createElement('div');
+                noResultsMsg.className = 'col-12 no-results-message';
+                noResultsMsg.innerHTML = `
+                    <div class="text-center py-5">
+                        <h4>No courses found</h4>
+                        <p>Try adjusting your search criteria or filters.</p>
+                    </div>
+                `;
+                coursesGrid.querySelector('.row').appendChild(noResultsMsg);
+            }
+            noResultsMsg.style.display = 'block';
+        } else {
+            if (noResultsMsg) {
+                noResultsMsg.style.display = 'none';
+            }
+        }
+    }
+    
+    // Category filter logic
+    categoryCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            // Handle "All Categories" checkbox
+            if (this.getAttribute('data-category') === 'all') {
+                if (this.checked) {
+                    // Uncheck all other category checkboxes
+                    categoryCheckboxes.forEach(cb => {
+                        if (cb !== this) {
+                            cb.checked = false;
+                        }
+                    });
+                }
+            } else {
+                // If any specific category is checked, uncheck "All Categories"
+                if (this.checked) {
+                    const allCategoriesCheckbox = document.querySelector('input[data-category="all"]');
+                    if (allCategoriesCheckbox) {
+                        allCategoriesCheckbox.checked = false;
+                    }
+                }
+                
+                // If no specific categories are checked, check "All Categories"
+                const specificCategoriesChecked = Array.from(categoryCheckboxes)
+                    .filter(cb => cb.getAttribute('data-category') !== 'all' && cb.checked);
+                
+                if (specificCategoriesChecked.length === 0) {
+                    const allCategoriesCheckbox = document.querySelector('input[data-category="all"]');
+                    if (allCategoriesCheckbox) {
+                        allCategoriesCheckbox.checked = true;
+                    }
+                }
+            }
+            
+            filterCourses();
+        });
+    });
+    
+    // Search functionality
+    searchInput.addEventListener('input', filterCourses);
+    
+    // Initial filter application
+    filterCourses();
+});
+</script>
 {% endblock %}
