@@ -36,7 +36,7 @@ class Command(BaseCommand):
 
         # ----- Universities -----
         image_folder = os.path.join(settings.BASE_DIR, 'static', 'assets', 'img', 'education')
-        image_files = [f for f in os.listdir(image_folder) if f.lower().endswith(('.png','.jpg','.jpeg','webp'))]
+        image_files = [f for f in os.listdir(image_folder) if f.lower().endswith(('.png','.jpg','.jpeg'))]
 
         universities = []
 
